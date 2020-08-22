@@ -4,30 +4,52 @@ import './index.css'
 
 class Square extends React.Component {
 
-  constructor(props){
-    super(props);
-    this.state = {
-      value: null
-    };
-  }
+ 
+  //  A propriedade onClick do DOM embutida no componente <button> diz ao React para criar um evento de escuta (event listener). 
+   
+  //  Quando o botão é clicado, o React irá chamar a função o manipulador de eventos onClick definido no método render() do Quadrado.
+   
+  //  Esse manipulador de eventos chamará a função recebida através da propriedade onClick que foi criada no Tabuleiro (this.props.onClick()).
 
+  // Como o Tabuleiro passou onClick={() => this.handleClick(i)} para o Quadrado, a função this.handleClick(i) será chamada quando o Quadrado for clicado.
+   
   render() {
     return (
       <button 
         className="square" 
-        onClick={() => {this.setState({value: 'x'});}}
+        onClick={() => this.props.onClick()}//Chama função onClick do Tabuleiro
       >
-        {this.state.value}
+        {this.props.value}
       </button>
     );
   }
 
 }
   
-class Board extends React.Component {
+class Board extends React.Component {//Tabuleiro
+
+  constructor(props){
+    
+    super(props);
+
+    this.state = ({
+      squares: Array(9).fill(null)
+    });
+  }
+
+  handleClink(i){
+    const squares = this.state.squares.slice();
+    squares[i] = 'x';
+    this.setState({squares: squares})
+  }
 
   renderSquare(i) {
-    return <Square value={i}/>;
+    return (
+      <Square 
+        value={this.state.squares[i]}
+        onClick={()=> this.handleClink(i)}
+      />
+    );
   }
 
   render() {
